@@ -52,6 +52,20 @@ public:
             cur = cur->next;
         return cur->get_value();
     }
+    
+    ForwardList<T>& sort() {
+        int i, j;
+        for (i = 0; i < this->get_size()-1; ++i) {
+            for (j = 0; j < this->get_size()-i-1; ++j) {
+                if ((*this)[j] > (*this)[j+1]) {
+                    T temp = (*this)[j];
+                    (*this)[j] = (*this)[j+1];
+                    (*this)[j+1] = temp;
+                }
+            }
+        }
+        return (*this);
+    }
 
     int get_size() {
         Node<T> *cur = head;
@@ -147,7 +161,7 @@ public:
     }
 
     void clear() {
-        while(head != nullptr) {
+        while (head != nullptr) {
             Node<T>* curr = head;
             head = head->next;
             delete curr;
