@@ -160,6 +160,23 @@ public:
         else
             return 0;
     }
+    
+    void reverse(){
+       std::vector<T> aux;
+       int cont=0;
+        Node<T>* curr = head;
+        while(curr != nullptr) {
+            aux.push_back(curr->get_value());
+            curr = curr->next;
+            ++cont;
+        }
+        this->clear();
+        for(int i=0;i<cont;++i){
+            push_front(aux[i]);
+        }
+        aux.clear();
+        
+    }
 
     // Destructor
 
