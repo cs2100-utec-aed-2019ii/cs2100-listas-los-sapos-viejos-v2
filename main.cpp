@@ -16,6 +16,10 @@ int main() {
     fl.push_front(6);
 
     cout << fl[0] << fl[1] << fl[2] << fl[3] << fl[4] << fl[5] << endl;
+
+    fl.sort();
+
+    cout << fl[0] << fl[1] << fl[2] << fl[3] << fl[4] << fl[5] << endl;
     
     return 0;
 }

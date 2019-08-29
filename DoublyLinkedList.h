@@ -5,6 +5,8 @@
 #ifndef DOUBLYLINKEDLIST_DOUBLYLINKEDLIST_H
 #define DOUBLYLINKEDLIST_DOUBLYLINKEDLIST_H
 
+#include <iostream>
+
 template <class T>
 struct Node {
     T value;
@@ -49,6 +51,20 @@ public:
         for (int i = 0; i < index; ++i)
             cur = cur->next;
         return cur->get_value();
+    }
+    
+    ForwardList<T>& sort() {
+        int i, j;
+        for (i = 0; i < this->get_size()-1; ++i) {
+            for (j = 0; j < this->get_size()-i-1; ++j) {
+                if ((*this)[j] > (*this)[j+1]) {
+                    T temp = (*this)[j];
+                    (*this)[j] = (*this)[j+1];
+                    (*this)[j+1] = temp;
+                }
+            }
+        }
+        return (*this);
     }
 
     int get_size() {
@@ -108,38 +124,72 @@ public:
     }
 
     Node<T>* pop_back() {
-       if (head == nullptr) {
-           return nullptr;
-       } else if (head->next == nullptr) {
-           T temp_value = head->get_value();
-           Node<T> deleted_node = Node(temp_value);
-           Node<T>* popped = &deleted_node;
-           delete head;
-           head = nullptr;
-           return popped;
-       } else {
-           Node<T>* temp = head;
-           while (temp->next->next != nullptr) {
-               temp = temp->next;
-           }
-           // temp es el penultimo
-           T temp_value = temp->next->get_value();
-           Node<T> deleted_node = Node(temp_value);
-           Node<T>* popped = &deleted_node;
+        if (head == nullptr) {
+            return nullptr;
+        } else if (head->next == nullptr) {
+            T temp_value = head->get_value();
+            Node<T> deleted_node = Node(temp_value);
+            Node<T>* popped = &deleted_node;
+            delete head;
+            head = nullptr;
+            return popped;
+        } else {
+            Node<T>* temp = head;
+            while (temp->next->next != nullptr) {
+                temp = temp->next;
+            }
+            // temp es el penultimo
+            T temp_value = temp->next->get_value();
+            Node<T> deleted_node = Node(temp_value);
+            Node<T>* popped = &deleted_node;
 
-           delete temp->next;
-           temp->next = nullptr;
+            delete temp->next;
+            temp->next = nullptr;
 
-           return popped;
-       }
+            return popped;
+        }
+    }
+
+    friend std::ostream& operator<< (std::ostream& os, const ForwardList& Lista){
+        Node<T>* new_node = Lista.head;
+        while (new_node != nullptr){
+            os << new_node->value << " ";
+            new_node = new_node->next;
+        }
+        os << "\n";
+        return os;
     }
 
     void clear() {
-        while(head != nullptr) {
+        while (head != nullptr) {
             Node<T>* curr = head;
             head = head->next;
             delete curr;
         }
+    }
+
+    bool empty(){
+        if(head==nullptr)
+            return 1;
+        else
+            return 0;
+    }
+    
+    void reverse(){
+       std::vector<T> aux;
+       int cont=0;
+        Node<T>* curr = head;
+        while(curr != nullptr) {
+            aux.push_back(curr->get_value());
+            curr = curr->next;
+            ++cont;
+        }
+        this->clear();
+        for(int i=0;i<cont;++i){
+            push_front(aux[i]);
+        }
+        aux.clear();
+        
     }
 
     // Destructor
