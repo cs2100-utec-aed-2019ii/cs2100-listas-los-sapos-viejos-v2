@@ -5,6 +5,8 @@
 #ifndef DOUBLYLINKEDLIST_DOUBLYLINKEDLIST_H
 #define DOUBLYLINKEDLIST_DOUBLYLINKEDLIST_H
 
+#include <iostream>
+
 template <class T>
 struct Node {
     T value;
@@ -16,6 +18,7 @@ struct Node {
     // Methods
 
     T& get_value() { return value; }
+    void set_value(T new_value) { this->value = new_value; }
 
 };
 
@@ -34,6 +37,27 @@ public:
 
     // Methods
 
+    T& operator[](const int& index) {
+        Node<T>* cur = head;
+        for (int i = 0; i < index; ++i)
+            cur = cur->next;
+        return cur->value;
+    }
+
+    ForwardList<T>& sort() {
+        int i, j;
+        for (i = 0; i < this->get_size()-1; ++i) {
+            for (j = 0; j < this->get_size()-i-1; ++j) {
+                if ((*this)[j] > (*this)[j+1]) {
+                    T temp = (*this)[j];
+                    (*this)[j] = (*this)[j+1];
+                    (*this)[j+1] = temp;
+                }
+            }
+        }
+        return (*this);
+    }
+
     T& front() { return head->get_value(); } // fails when size = 0
 
     T& back() { // fails when size = 0
@@ -41,13 +65,6 @@ public:
         while (cur->next != nullptr) {
             cur = cur->next;
         }
-        return cur->get_value();
-    }
-
-    T& operator [](int index) {
-        Node<T>* cur = head;
-        for (int i = 0; i < index; ++i)
-            cur = cur->next;
         return cur->get_value();
     }
 
@@ -85,11 +102,9 @@ public:
             head->next = new_node;
         } else { // size = 2...∞
             Node<T>* cur = head;
-
             while (cur->next != nullptr) {
                 cur = cur->next;
             }
-
             cur->next = new_node;
         }
     }
@@ -100,10 +115,10 @@ public:
         } else {
             Node<T> deleted_node = Node(head->get_value());
             Node<T>* popped = &deleted_node;
-            Node<T>* aux = head; // point to head
-            head = head->next; // set head to its next value
-            delete aux; // delete the contents of the previous head
-            return popped; // return a node with the old content of old head
+            Node<T>* aux = head;
+            head = head->next;
+            delete aux;
+            return popped;
         }
     }
 
