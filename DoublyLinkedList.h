@@ -5,6 +5,8 @@
 #ifndef DOUBLYLINKEDLIST_DOUBLYLINKEDLIST_H
 #define DOUBLYLINKEDLIST_DOUBLYLINKEDLIST_H
 
+#include <iostream>
+
 template <class T>
 struct Node {
     T value;
