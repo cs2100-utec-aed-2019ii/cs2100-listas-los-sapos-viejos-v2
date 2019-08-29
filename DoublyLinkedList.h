@@ -134,6 +134,16 @@ public:
        }
     }
 
+	friend std::ostream& operator<< (std::ostream& os, const ForwardList& Lista){
+        Node<T>* new_node = Lista.head;
+        while (new_node != nullptr){
+            os << new_node->value << " ";
+            new_node = new_node->next;
+        }
+        os << "\n";
+        return os;
+    }
+
     void clear() {
         while(head != nullptr) {
             Node<T>* curr = head;
