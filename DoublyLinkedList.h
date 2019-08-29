@@ -108,33 +108,33 @@ public:
     }
 
     Node<T>* pop_back() {
-       if (head == nullptr) {
-           return nullptr;
-       } else if (head->next == nullptr) {
-           T temp_value = head->get_value();
-           Node<T> deleted_node = Node(temp_value);
-           Node<T>* popped = &deleted_node;
-           delete head;
-           head = nullptr;
-           return popped;
-       } else {
-           Node<T>* temp = head;
-           while (temp->next->next != nullptr) {
-               temp = temp->next;
-           }
-           // temp es el penultimo
-           T temp_value = temp->next->get_value();
-           Node<T> deleted_node = Node(temp_value);
-           Node<T>* popped = &deleted_node;
+        if (head == nullptr) {
+            return nullptr;
+        } else if (head->next == nullptr) {
+            T temp_value = head->get_value();
+            Node<T> deleted_node = Node(temp_value);
+            Node<T>* popped = &deleted_node;
+            delete head;
+            head = nullptr;
+            return popped;
+        } else {
+            Node<T>* temp = head;
+            while (temp->next->next != nullptr) {
+                temp = temp->next;
+            }
+            // temp es el penultimo
+            T temp_value = temp->next->get_value();
+            Node<T> deleted_node = Node(temp_value);
+            Node<T>* popped = &deleted_node;
 
-           delete temp->next;
-           temp->next = nullptr;
+            delete temp->next;
+            temp->next = nullptr;
 
-           return popped;
-       }
+            return popped;
+        }
     }
 
-	friend std::ostream& operator<< (std::ostream& os, const ForwardList& Lista){
+    friend std::ostream& operator<< (std::ostream& os, const ForwardList& Lista){
         Node<T>* new_node = Lista.head;
         while (new_node != nullptr){
             os << new_node->value << " ";
@@ -150,6 +150,13 @@ public:
             head = head->next;
             delete curr;
         }
+    }
+
+    bool empty(){
+        if(head==nullptr)
+            return 1;
+        else
+            return 0;
     }
 
     // Destructor
