@@ -168,8 +168,8 @@ public:
         }
     }
 
-    bool empty() {
-        if (head == nullptr)
+    bool empty(){
+        if(head==nullptr)
             return 1;
         else
             return 0;
