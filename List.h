@@ -5,6 +5,8 @@
 #ifndef DOUBLYLINKEDLIST_LIST_H
 #define DOUBLYLINKEDLIST_LIST_H
 
+#include <iostream>
+
 #include "Node.h"
 
 // List.h
@@ -15,11 +17,12 @@ protected:
     Node<T>* tail = nullptr;
     unsigned int size = 0;
 public:
-    List(List& another_list) {} // Constructor copia
-    List() {} // Constructor por defecto​
-    List(T* arr) {} //Constructor  parametro, llena una lista a partir de un array​
-    List(Node<T>* node) {} //Constructor por parametro, retorna una lista con un nodo
-    List(int n) {} //Constructor por parametro, retorna un lista de randoms de tamaño n
+    List() = default; // Constructor por defecto​
+    explicit List(List& another_list) {} // Constructor copia
+    explicit List(T* arr) {} //Constructor  parametro, llena una lista a partir de un array​
+    explicit List(Node<T>* node) {} //Constructor por parametro, retorna una lista con un nodo
+    explicit List(int n) {} //Constructor por parametro, retorna un lista de randoms de tamaño n
+
     virtual T& front() = 0; // Retorna una referencia al primer elemento
     virtual T& back() = 0; // Retorna una referencia al ultimo elemento
     virtual void push_back(const T& element) = 0; // Inserta un elemento al final
@@ -35,13 +38,10 @@ public:
     virtual void drop(const T&) = 0; // Elimina todos los elementos de la lista que tienen el valor igual al parametro
     virtual List& sort() = 0; // ordena la lista
     virtual List& reverse() = 0; // invierte la lista
-//    template<typename __T>
-//    inline friend std::ostream& operator<< (std::ostream& , const ForwardList<__T>& ) = 0; // Imprime la lista con cout
-//    template<typename __T>
-//    inline friend ForwardList& operator<< (ForwardList<__T>&, const T& ) = 0; // push_back de un elemento
-//    template<typename __T>
-//    inline friend ForwardList& operator>> (ForwardList<__T>&, const T& ) = 0; // pop_back de un elemento
-//    virtual ~List() = 0;
+
+    inline friend std::ostream& operator<< (std::ostream&, const List<T>&) {} // Imprime la lista con cout
+    inline friend List& operator<< (List<T>& , const T&) {} // push_back de un elemento
+    inline friend List& operator>> (List<T>& , const T&) {} // pop_back de un elemento
 };
 
 
