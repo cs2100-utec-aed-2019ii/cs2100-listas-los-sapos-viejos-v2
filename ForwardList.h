@@ -29,50 +29,86 @@ public:
     }
 
     void push_back(const T& element) override {
-        /// TODO
-    }
-
-    Node<T>* pop_back() override {
-        /// TODO
-    }
-
-    void push_front(const T& element) override {
-        if (size == 0) {
-            head = tail = new Node(element);
+        Node<T>* new_node = new Node(element);
+        if (size >= 2) {
+            tail->next = new_node;
+            tail = tail->next;
+            increase_size;
+        } else if (is_empty()) {
+            head = tail = new_node;
             increase_size;
         } else if (size == 1) {
+            tail = new_node;
             head->next = tail;
-            head = new Node(element);
-            increase_size;
-        } else {
-            head->next = head;
-            head = new Node(element);
             increase_size;
         }
     }
 
-    Node<T>* pop_front() override {
-        if (size == 0) {
-            return head;
+    void push_front(const T& element) override {
+        Node<T>* new_node = new Node(element);
+        if (size >= 2) {
+            Node<T>* temp_head = head;
+            Node<T>* temp_head_next = head->next;
+            head = new_node;
+            head->next = temp_head;
+            temp_head->next = temp_head_next;
+            increase_size;
+        } else if (is_empty()) {
+            head = tail = new_node;
+            increase_size;
         } else if (size == 1) {
+            head = new_node;
+            head->next = tail;
+            increase_size;
+        }
+    }
+
+    Node<T>* pop_back() override {
+        if (size >= 3) {
+            Node<T>* deleted_node = new Node(tail->value);
+            Node<T>* aux = tail;
+            tail = tail->next;
+            delete aux;
+            decrease_size;
+            return deleted_node;
+        } else if (is_empty()) {
+            return nullptr;
+        } else if (size == 1) {
+            Node<T>* deleted_node = new Node(tail->value);
+            delete tail;
+            tail = head = nullptr;
+            decrease_size;
+            return deleted_node;
+        } else if (size == 2) {
+            Node<T>* deleted_node = new Node(tail->value);
+            delete tail;
+            tail = head;
+            head->next = nullptr;
+            decrease_size;
+            return deleted_node;
+        }
+    }
+
+    Node<T>* pop_front() override {
+        if (size >= 3) {
             Node<T>* deleted_node = new Node(head->value);
             Node<T>* aux = head;
+            head = head->next;
             delete aux;
+            decrease_size;
+            return deleted_node;
+        } else if (is_empty()) {
+            return nullptr;
+        } else if (size == 1) {
+            Node<T>* deleted_node = new Node(head->value);
+            delete head;
             head = tail = nullptr;
             decrease_size;
             return deleted_node;
         } else if (size == 2) {
             Node<T>* deleted_node = new Node(head->value);
-            Node<T>* aux = head;
-            delete aux;
+            delete head;
             head = tail;
-            decrease_size;
-            return deleted_node;
-        } else {
-            Node<T>* deleted_node = new Node(head->value);
-            Node<T>* aux = head;
-            head = head->next;
-            delete aux;
             decrease_size;
             return deleted_node;
         }
@@ -96,25 +132,54 @@ public:
     void clear() override {
         while (head != nullptr) {
             Node<T>* curr = head;
-            head = head->next;
+            std::cout << "Deleted node with value: " << curr->value << std::endl;
             delete curr;
+            head = head->next;
         }
+        size = 0;
     }
 
-    void erase(Node<T>*) override {} // Elimina un elemento de la lista en base a un puntero
-    void insert(Node<T>*, const T&) override {} // Inserta un elemento en la lista en base a un puntero
-    void drop(const T&) override {} // Elimina todos los elementos de la lista que tienen el valor igual al parametro
+    // Elimina un elemento de la lista en base a un puntero
+    void erase(Node<T>* node_to_delete) override {
 
-    ForwardList& sort() {} // ordena la list
-    ForwardList& reverse() {} // invierte la lista
-//    template <typename __T>
-//    inline friend std::ostream& operator<< (std::ostream& , const ForwardList<__T>& ) override {}  // Imprime la lista con cout
-//    ​
-//    template<typename __T>
-//    inline friend ForwardList& operator<< (ForwardList<__T>&, const T& ) override {} // push_back de un elemento
-//    ​
-//    template<typename __T>
-//    inline friend ForwardList& operator>> (ForwardList<__T>&, const T& ) override {} // pop_back de un elemento
+    }
+
+    // Inserta un elemento en la lista en base a un puntero
+    void insert(Node<T>* reference_node, const T& value) override {
+
+    }
+
+    // Elimina todos los elementos de la lista que tienen el valor igual al parametro
+    void drop(const T& black_value) override {
+
+    }
+
+    ForwardList& sort() {
+
+    }
+
+    ForwardList& reverse() {
+
+    }
+
+    // Imprime la lista con cout
+    inline friend std::ostream& operator<< (std::ostream& os, const ForwardList<T>& fl) {
+
+    }
+
+    // push_back de un elemento
+    inline friend ForwardList& operator<< (ForwardList<T>& self, const T& element_to_add) {
+
+    }
+
+    // pop_back de un elemento
+    inline friend ForwardList& operator>> (ForwardList<T>& self, const T& element_to_delete) {
+
+    }
+
+    ~ForwardList() {
+        clear();
+    }
 
 };
 
