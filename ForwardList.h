@@ -85,10 +85,14 @@ public:
     }
 
     Node<T>* find_node_at(const unsigned int& index) {
-        Node<T>* cur = HEAD;
-        for (unsigned int i = 0; i < index; ++i)
-            cur = cur->next;
-        return cur;
+        if (!(index >= SIZE)) {
+            Node<T> *cur = HEAD;
+            for (unsigned int i = 0; i < index; ++i)
+                cur = cur->next;
+            return cur;
+        } else {
+            return nullptr;
+        }
     }
 
     /// Agregar y eliminar elementos
@@ -202,21 +206,20 @@ public:
 
     // Elimina un elemento de la lista en base a un puntero
     void erase(Node<T>* node_to_delete) override {
-        T value_to_find = node_to_delete->value;
-
-        if (value_to_find == HEAD->value) {
-            pop_front();
-        } else if (value_to_find == TAIL->value) {
-            pop_back();
-        } else {
-            Node<T>* temp = HEAD;
-            while (temp->next->value != value_to_find || temp->next != nullptr) {
-                temp = temp->next;
+        if (node_to_delete != nullptr) {
+            if (node_to_delete == HEAD) {
+                pop_front();
+            } else if (node_to_delete == TAIL) {
+                pop_back();
+            } else {
+                Node<T> *temp = HEAD;
+                while (temp->next != node_to_delete) {
+                    temp = temp->next;
+                }
+                Node<T> *aux = temp->next; // aux points to the node to delete
+                temp->next = temp->next->next;
+                delete aux;
             }
-            Node<T>* aux = temp->next; // aux points to the node to delete
-            temp->next = temp->next->next;
-            temp->next->next = nullptr;
-            delete aux;
         }
     }
 
