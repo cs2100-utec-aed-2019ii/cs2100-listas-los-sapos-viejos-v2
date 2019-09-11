@@ -84,14 +84,11 @@ public:
         return cur->value;
     }
 
-    Node<T>* find_node_with_value(const T& value) {
+    Node<T>* find_node_at(const unsigned int& index) {
         Node<T>* cur = HEAD;
-        while (cur != nullptr) {
-            if (cur->value == value)
-                return cur;
+        for (unsigned int i = 0; i < index; ++i)
             cur = cur->next;
-        }
-        return nullptr;
+        return cur;
     }
 
     /// Agregar y eliminar elementos
@@ -189,15 +186,18 @@ public:
     }
 
     void clear() override {
-        while (HEAD != TAIL) {
-            Node<T>* curr = HEAD;
-            std::cout << "Deleted node with value: " << curr->value << std::endl;
-            delete curr;
-            HEAD = HEAD->next;
+        if (HEAD != nullptr && TAIL != nullptr) {
+            while (HEAD != TAIL) {
+                Node<T> *curr = HEAD;
+                std::cout << "Deleted node with value: " << curr->value << std::endl;
+                delete curr;
+                HEAD = HEAD->next;
+            }
+            delete TAIL;
+            HEAD = nullptr;
+            TAIL = nullptr;
+            SIZE = 0;
         }
-        delete TAIL;
-        HEAD = TAIL = nullptr;
-        SIZE = 0;
     }
 
     // Elimina un elemento de la lista en base a un puntero
@@ -221,14 +221,14 @@ public:
     }
 
     // Inserta un elemento en la lista en base a un puntero
-    void insert(Node<T>* reference_node, const T& value) override {
-        T ref_node_value = reference_node->value;
-        if (ref_node_value == HEAD->value) {
-
-        } else if (ref_node_value == TAIL->value) {
-
+    void insert(Node<T>* reference_node, const T& value_to_insert) override {
+        Node<T>* new_node = new Node(value_to_insert);
+        if (reference_node == HEAD && reference_node == TAIL) {
+            HEAD->next = new_node;
+            TAIL = new_node;
         } else {
-
+            new_node->next = reference_node->next;
+            reference_node->next = new_node;
         }
     }
 
