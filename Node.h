@@ -9,7 +9,7 @@ template <class T>
 struct Node {
     T value;
     Node* next = nullptr;
-
+    Node* previous = nullptr;
     Node() = default;
     explicit Node(T value): value{value} {}
 };
