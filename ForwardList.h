@@ -7,6 +7,7 @@
 
 #include <cstdlib>
 #include <ctime>
+#include <vector>
 
 #include "List.h"
 
@@ -85,7 +86,7 @@ public:
 
     Node<T>* find_node_with_value(const T& value) {
         Node<T>* cur = HEAD;
-        while (cur->value != nullptr) {
+        while (cur != nullptr) {
             if (cur->value == value)
                 return cur;
             cur = cur->next;
@@ -132,9 +133,11 @@ public:
 
     Node<T>* pop_back() override {
         if (SIZE >= 3) {
-            Node<T>* deleted_node = new Node(TAIL->value);
             Node<T>* aux = TAIL;
-            TAIL = TAIL->next;
+            Node<T>* deleted_node = new Node(back());
+            Node<T>* temp = HEAD;
+            while (temp->next != TAIL) { temp = temp->next; }
+            TAIL = temp;
             delete aux;
             decrease_size;
             return deleted_node;
@@ -186,38 +189,89 @@ public:
     }
 
     void clear() override {
-        while (HEAD != nullptr) {
+        while (HEAD != TAIL) {
             Node<T>* curr = HEAD;
             std::cout << "Deleted node with value: " << curr->value << std::endl;
             delete curr;
             HEAD = HEAD->next;
         }
+        delete TAIL;
+        HEAD = TAIL = nullptr;
         SIZE = 0;
     }
 
     // Elimina un elemento de la lista en base a un puntero
     void erase(Node<T>* node_to_delete) override {
+        T value_to_find = node_to_delete->value;
 
+        if (value_to_find == HEAD->value) {
+            pop_front();
+        } else if (value_to_find == TAIL->value) {
+            pop_back();
+        } else {
+            Node<T>* temp = HEAD;
+            while (temp->next->value != value_to_find || temp->next != nullptr) {
+                temp = temp->next;
+            }
+            Node<T>* aux = temp->next; // aux points to the node to delete
+            temp->next = temp->next->next;
+            temp->next->next = nullptr;
+            delete aux;
+        }
     }
 
     // Inserta un elemento en la lista en base a un puntero
     void insert(Node<T>* reference_node, const T& value) override {
+        T ref_node_value = reference_node->value;
+        if (ref_node_value == HEAD->value) {
 
+        } else if (ref_node_value == TAIL->value) {
+
+        } else {
+
+        }
     }
 
     // Elimina todos los elementos de la lista que tienen el valor igual al parametro
     void drop(const T& black_value) override {
-
+        Node<T>* temp = HEAD;
+        while (temp != nullptr) {
+            if (temp->value == black_value)
+                erase(temp);
+            temp = temp->next;
+        }
     }
 
-    /// Miscelánea ( estos métodos retornan un ForwardList para que ambos se puedan encadenar: fl.reverse().sort() )
+    /// Miscelánea (estos métodos retornan un ForwardList para que ambos se puedan encadenar: fl.reverse().sort())
 
     ForwardList& sort() {
-
+        int i, j;
+        for (i = 0; i < this->get_size()-1; ++i) {
+            for (j = 0; j < this->get_size()-i-1; ++j) {
+                if ((*this)[j] > (*this)[j+1]) {
+                    T temp = (*this)[j];
+                    (*this)[j] = (*this)[j+1];
+                    (*this)[j+1] = temp;
+                }
+            }
+        }
+        return (*this);
     }
 
     ForwardList& reverse() {
-
+        std::vector<T> reversed;
+        int cont = 0;
+        Node<T>* curr = HEAD;
+        while (curr != nullptr) {
+            reversed.push_back(curr->value);
+            curr = curr->next;
+            ++cont;
+        }
+        this->clear();
+        for (int i = 0; i < cont; ++i){
+            push_front(reversed[i]);
+        }
+        return (*this);
     }
 
     /// Sobrecarga de operadores
@@ -232,7 +286,7 @@ public:
             }
             return os;
         } else {
-            os << "Empty Forward List!\n";
+            os << "Empty Forward List!";
             return os;
         }
     }
@@ -248,7 +302,7 @@ public:
         for (unsigned int i = 0; i < self.size; ++i) {
             if (self[i] == element_to_delete) {
                 Node<T>* node_to_delete = self.find_node_with_value(element_to_delete);
-                // TODO: call function that delete node passed as an argument
+                self.erase(node_to_delete);
             }
         }
         return self;
