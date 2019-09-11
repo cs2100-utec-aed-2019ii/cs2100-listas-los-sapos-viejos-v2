@@ -212,13 +212,14 @@ public:
             } else if (node_to_delete == TAIL) {
                 pop_back();
             } else {
-                Node<T> *temp = HEAD;
+                Node<T>* temp = HEAD;
                 while (temp->next != node_to_delete) {
                     temp = temp->next;
                 }
                 Node<T> *aux = temp->next; // aux points to the node to delete
                 temp->next = temp->next->next;
                 delete aux;
+                decrease_size;
             }
         }
     }
@@ -229,9 +230,11 @@ public:
         if (reference_node == HEAD && reference_node == TAIL) {
             HEAD->next = new_node;
             TAIL = new_node;
+            increase_size;
         } else {
             new_node->next = reference_node->next;
             reference_node->next = new_node;
+            increase_size;
         }
     }
 
@@ -239,8 +242,10 @@ public:
     void drop(const T& black_value) override {
         Node<T>* temp = HEAD;
         while (temp != nullptr) {
-            if (temp->value == black_value)
+            if (temp->value == black_value) {
                 erase(temp);
+                decrease_size;
+            }
             temp = temp->next;
         }
     }
