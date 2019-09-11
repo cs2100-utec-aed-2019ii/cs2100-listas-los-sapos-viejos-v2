@@ -19,9 +19,9 @@ protected:
 public:
     List() = default; // Constructor por defecto​
     explicit List(List& another_list) {} // Constructor copia
-    explicit List(T* arr) {} //Constructor  parametro, llena una lista a partir de un array​
+    explicit List(T* arr, const unsigned int& len) {} //Constructor  parametro, llena una lista a partir de un array​
     explicit List(Node<T>* node) {} //Constructor por parametro, retorna una lista con un nodo
-    explicit List(int n) {} //Constructor por parametro, retorna un lista de randoms de tamaño n
+    explicit List(const int& n) {} //Constructor por parametro, retorna un lista de randoms de tamaño n
 
     virtual T& front() = 0; // Retorna una referencia al primer elemento
     virtual T& back() = 0; // Retorna una referencia al ultimo elemento
@@ -39,9 +39,9 @@ public:
     virtual List& sort() = 0; // ordena la lista
     virtual List& reverse() = 0; // invierte la lista
 
-    inline friend std::ostream& operator<< (std::ostream&, const List<T>&) {} // Imprime la lista con cout
-    inline friend List& operator<< (List<T>& , const T&) {} // push_back de un elemento
-    inline friend List& operator>> (List<T>& , const T&) {} // pop_back de un elemento
+//    inline friend std::ostream& operator<< (std::ostream&, const List<T>&) {} // Imprime la lista con cout
+//    inline friend List& operator<< (List<T>& , const T&) {} // push_back de un elemento
+//    inline friend List& operator>> (List<T>& , const T&) {} // pop_back de un elemento
 };
 
 
