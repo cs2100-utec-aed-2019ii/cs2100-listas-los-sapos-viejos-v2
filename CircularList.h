@@ -17,29 +17,43 @@ class CircularList : public List<T> {
 protected:
 
 public:
-    explicit CircularList(List<T>& another_list) {
-
+    Node<T>* get_head() {
+        return HEAD;
     }
 
-    explicit CircularList(T* arr) {
+    Node<T>* get_tail() {
+        return TAIL;
+    }
 
+    CircularList(CircularList<T>& another_list) {
+        if (!another_list.is_empty()) {
+            Node<T>* temp = another_list.get_head();
+            for (int i = 0; i < another_list.get_size(); i++){
+                push_back(temp->value);
+                temp = temp->next;
+            }
+        }
+    }
+
+    CircularList(T* arr, const unsigned int& len) {
+        for (int *p = arr; p < arr+len; ++p) {
+            push_back(*p);
+        }
     }
 
     explicit CircularList(Node<T>* node) {
-
+        HEAD = TAIL = node;
+        increase_size;
     }
 
-    explicit CircularList(T n) {
-        HEAD = TAIL = new Node(n);
+    explicit CircularList(const int& n) {
+        srand((unsigned)time(nullptr));
+        for (int i = 0; i < n; ++i) {
+            push_back((rand()%100)+1);
+        }
     }
 
     CircularList() = default;
-
-    void print()  {
-        std::cout << "Head: " <<HEAD->value << std::endl;
-        std::cout << "Tail: " <<TAIL->value << std::endl;
-
-    }
 
     T& front() override {
         return HEAD->value;
@@ -89,11 +103,54 @@ public:
     }
 
     Node<T>* pop_back() override {
-
+        if (SIZE == 0){
+            return nullptr;
+        } else if (SIZE == 1){
+            Node<T>* deleted_node = new Node(TAIL->value);
+            delete TAIL;
+            TAIL = HEAD = nullptr;
+            decrease_size;
+            return deleted_node;
+        } else if (SIZE == 2){
+            Node<T>* deleted_node = new Node(TAIL->value);
+            delete TAIL;
+            TAIL = HEAD;
+            decrease_size;
+            return deleted_node;
+        } else {
+            Node<T>* deleted_node = new Node(TAIL->value);
+            Node<T>* temp = HEAD;
+            while(temp->next != TAIL){ temp = temp->next; }
+            delete TAIL;
+            TAIL = temp;
+            decrease_size;
+            return deleted_node;
+        }
     }
 
     Node<T>* pop_front() override {
-
+        if (SIZE == 0){
+            return nullptr;
+        } else if (SIZE == 1){
+            Node<T>* deleted_node = new Node(HEAD->value);
+            delete HEAD;
+            TAIL = HEAD = nullptr;
+            decrease_size;
+            return deleted_node;
+        } else if (SIZE == 2){
+            Node<T>* deleted_node = new Node(HEAD->value);
+            delete HEAD;
+            HEAD = TAIL;
+            decrease_size;
+            return deleted_node;
+        } else {
+            Node<T>* deleted_node = new Node(HEAD->value);
+            TAIL->next = HEAD->next;
+            delete HEAD;
+            HEAD = TAIL->next;
+            decrease_size;
+            return deleted_node;
+        }
     }
 
     bool is_empty() override {
@@ -116,24 +173,86 @@ public:
         SIZE = 0;
     }
 
-    void erase(Node<T>*) override {
+    Node<T>* find_node_at(const unsigned int& index) {
+        Node<T>* cur = HEAD;
+        for (unsigned int i = 0; i < index; ++i)
+            cur = cur->next;
+        return cur;
+    }
+
+    void erase(Node<T>* node_to_delete) override {
+
+        if (node_to_delete == HEAD) {
+            pop_front();
+        } else if (node_to_delete == TAIL) {
+            pop_back();
+        } else {
+            Node<T>* temp = HEAD;
+            while (temp->next != node_to_delete) {
+                temp = temp->next;
+            }
+            Node<T>* aux = temp->next; // aux points to the node to delete
+            temp->next = temp->next->next;
+            decrease_size;
+            delete aux;
+        }
 
     }
 
-    void insert(Node<T>*, const T&) override {
-
+    void insert(Node<T>* reference_node, const T& value_to_insert) override {
+        Node<T>* new_node = new Node(value_to_insert);
+        if (reference_node == HEAD && reference_node == TAIL) {
+            TAIL = new_node;
+            HEAD->next = TAIL;
+            TAIL->next = HEAD;
+        } else {
+            new_node->next = reference_node->next;
+            reference_node->next = new_node;
+        }
+        increase_size;
     }
 
-    void drop(const T&) override {
+    void drop(const T& black_value) override {
+        Node<T>* temp = HEAD;
+        int size = SIZE;
+        for(int i = 0; i < size; i++) {
+            if (temp->value == black_value) {
+                erase(temp);
+            }
+            temp = temp->next;
+        }
 
     }
 
     CircularList& sort() override {
-
+        int i, j;
+        for (i = 0; i < this->get_size()-1; ++i) {
+            for (j = 0; j < this->get_size()-i-1; ++j) {
+                if ((*this)[j] > (*this)[j+1]) {
+                    T temp = (*this)[j];
+                    (*this)[j] = (*this)[j+1];
+                    (*this)[j+1] = temp;
+                }
+            }
+        }
+        return (*this);
     }
 
     CircularList& reverse() override {
-
+        std::vector<T> reversed;
+        int cont = 0;
+        Node<T>* curr = HEAD;
+        int size = SIZE;
+        for (int i = 0; i < size; i++) {
+            reversed.push_back(curr->value);
+            curr = curr->next;
+            ++cont;
+        }
+        this->clear();
+        for (int i = 0; i < cont; ++i){
+            push_front(reversed[i]);
+        }
+        return (*this);
     }
 
     //Busqueda por index
