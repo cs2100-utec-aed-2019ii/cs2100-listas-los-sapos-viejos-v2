@@ -1,6 +1,3 @@
-//
-// Created by Gabriel Spranger Rojas on 2019-09-03.
-//
 
 #ifndef DOUBLYLINKEDLIST_DOUBLELIST_H
 #define DOUBLYLINKEDLIST_DOUBLELIST_H
@@ -20,6 +17,8 @@ class DoubleList : public List<T> {
 
 
 public:
+
+
     T& front() override {
         return head->value;
     }
@@ -29,9 +28,11 @@ public:
     }
 
     void push_back(const T& element) override {
-        Node<T>* new_node = new Node<T>(element);
+        auto* new_node = new Node<T>(element);
         if (size >= 2) {
             tail->next = new_node;
+            auto aux = tail;
+            new_node->previous=aux;
             tail = tail->next;
             increase_size;
         } else if (is_empty()) {
@@ -40,17 +41,19 @@ public:
         } else if (size == 1) {
             tail = new_node;
             head->next = tail;
+            tail->previous = head;
             increase_size;
         }
     }
 
     void push_front(const T& element) override {
-        Node<T>* new_node = new Node<T>(element);
+        auto* new_node = new Node<T>(element);
         if (size >= 2) {
             Node<T>* temp_head = head;
             Node<T>* temp_head_next = head->next;
             head = new_node;
             head->next = temp_head;
+            temp_head->previous = head;
             temp_head->next = temp_head_next;
             increase_size;
         } else if (is_empty()) {
@@ -59,28 +62,30 @@ public:
         } else if (size == 1) {
             head = new_node;
             head->next = tail;
+            tail->previous = head;
             increase_size;
         }
     }
 
     Node<T>* pop_back() override {
         if (size >= 3) {
-            Node<T>* deleted_node = new Node<T>(tail->value);
+            auto* deleted_node = new Node<T>(tail->value);
             Node<T>* aux = tail;
-            tail = tail->next;
+            tail = tail->previous;
+            tail->next=nullptr;
             delete aux;
             decrease_size;
             return deleted_node;
         } else if (is_empty()) {
             return nullptr;
         } else if (size == 1) {
-            Node<T>* deleted_node = new Node<T>(tail->value);
+            auto* deleted_node = new Node<T>(tail->value);
             delete tail;
             tail = head = nullptr;
             decrease_size;
             return deleted_node;
         } else if (size == 2) {
-            Node<T>* deleted_node = new Node<T>(tail->value);
+            auto* deleted_node = new Node<T>(tail->value);
             delete tail;
             tail = head;
             head->next = nullptr;
@@ -89,9 +94,34 @@ public:
         }
     }
 
+    void print_backwards_test_to_test_previous_linking(){
+        auto temp = tail;
+        std::cout<<std::endl;
+        while(temp->previous!=nullptr){
+            std::cout<<temp->value<<" ";
+            temp=temp->previous;
+        }
+        std::cout<<temp->value<<" ";
+
+
+        std::cout<<std::endl;
+    }
+    void print_forward(){
+        auto temp = head;
+        std::cout<<std::endl;
+        while(temp->next!=nullptr){
+            std::cout<<temp->value<<" ";
+            temp=temp->next;
+        }
+        std::cout<<temp->value<<" ";
+
+
+        std::cout<<std::endl;
+    }
+
     Node<T>* pop_front() override {
         if (size >= 3) {
-            Node<T>* deleted_node = new Node<T>(head->value);
+            auto* deleted_node = new Node<T>(head->value);
             Node<T>* aux = head;
             head = head->next;
             delete aux;
@@ -100,13 +130,13 @@ public:
         } else if (is_empty()) {
             return nullptr;
         } else if (size == 1) {
-            Node<T>* deleted_node = new Node<T>(head->value);
+            auto* deleted_node = new Node<T>(head->value);
             delete head;
             head = tail = nullptr;
             decrease_size;
             return deleted_node;
         } else if (size == 2) {
-            Node<T>* deleted_node = new Node<T>(head->value);
+            auto* deleted_node = new Node<T>(head->value);
             delete head;
             head = tail;
             decrease_size;
@@ -121,8 +151,9 @@ public:
     T& operator[](const unsigned int& index) override {
         Node<T>* cur = head;
         for (unsigned int i = 0; i < index; ++i)
-            cur = cur->next;
-        return cur->value;
+                cur = cur->next;
+            return cur->value;
+
     }
 
     bool is_empty() override {
