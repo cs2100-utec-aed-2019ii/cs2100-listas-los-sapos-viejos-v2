@@ -6,12 +6,12 @@
 #define DOUBLYLINKEDLIST_NODE_H
 
 template <class T>
-struct Node {
+class Node {
+protected:
     T value;
-    Node* next = nullptr;
-
-    Node() = default;
-    explicit Node(T value): value{value} {}
+public:
+    Node(T value): value{value} {}
+    ~Node() = default;
 };
 
 #endif //DOUBLYLINKEDLIST_NODE_H

@@ -13,12 +13,11 @@
 template <typename T>
 class List {
 protected:
-    Node<T>* head = nullptr;
-    Node<T>* tail = nullptr;
+//    Node<T>* head = nullptr;
     unsigned int size = 0;
 public:
     List() = default; // Constructor por defecto​
-    explicit List(List& another_list) {} // Constructor copia
+    List(List& another_list) {} // Constructor copia
     explicit List(T* arr, const unsigned int& len) {} //Constructor  parametro, llena una lista a partir de un array​
     explicit List(Node<T>* node) {} //Constructor por parametro, retorna una lista con un nodo
     explicit List(const int& n) {} //Constructor por parametro, retorna un lista de randoms de tamaño n
@@ -30,14 +29,14 @@ public:
     virtual Node<T>* pop_back() = 0; // Quita el ultimo elemento de la lista y retorna una referencia
     virtual Node<T>* pop_front() = 0; // Quita el primer elemento de la lista y retorna una referencia
     virtual T& operator[] (const unsigned int&) = 0; // devuelve el valor de un nodo en una posicion determinad
-    virtual bool is_empty() = 0; // la lista esta vacia?
+    virtual bool is_empty() = 0; // la lista esta vacia?:?????
     virtual unsigned int get_size() = 0; // retorna el tamaño de la lista
     virtual void clear() = 0; // Elimina toda la lista
-    virtual void erase(Node<T>*) = 0; // Elimina un elemento de la lista en base a un puntero
-    virtual void insert(Node<T>*, const T&) = 0; // Inserta un elemento en la lista en base a un puntero
+//    virtual void erase(Node<T>*) {} // Elimina un elemento de la lista en base a un puntero
+//    virtual void insert(Node<T>*, const T&) {} // Inserta un elemento en la lista en base a un puntero
     virtual void drop(const T&) = 0; // Elimina todos los elementos de la lista que tienen el valor igual al parametro
-    virtual List& sort() = 0; // ordena la lista
-    virtual List& reverse() = 0; // invierte la lista
+//    virtual List<T>& sort() {} // ordena la lista
+//    virtual List<T>& reverse() {} // invierte la lista
 
 //    inline friend std::ostream& operator<< (std::ostream&, const List<T>&) {} // Imprime la lista con cout
 //    inline friend List& operator<< (List<T>& , const T&) {} // push_back de un elemento

@@ -1,29 +1,28 @@
 #include <iostream>
+
 #include "ForwardList.h"
 
 int main(int argc, char** argv) {
 
-    int arr[] = {1, 2, 3, 4, 5};
+    ForwardList<int> fl;
 
-    ForwardList<int> fl(arr, 5);
-
-    std::cout << "Front: " << fl.front() << std::endl;
-    std::cout << "Back: " << fl.back() << std::endl;
-    std::cout << "Size: " << fl.get_size() << std::endl;
-    std::cout << "Element at fl[2] = " << fl[2] << std::endl;
+    fl.push_front(645);
+    fl.push_front(5);
+    fl.push_front(87);
+    fl.push_front(46);
+    fl.push_front(99);
 
     std::cout << fl << std::endl;
 
+    ForwardListNode<int>* ref = fl.find_node_at(0);
 
-    ForwardList<int> fl1(fl);
+    fl.insert(ref, 2);
 
-    std::cout << "Front: " << fl1.front() << std::endl;
-    std::cout << "Back: " << fl1.back() << std::endl;
-    std::cout << "Size: " << fl1.get_size() << std::endl;
-    std::cout << "Element at fl[2] = " << fl1[2] << std::endl;
+    ForwardListNode<int>* ref2 = fl.find_node_at(7);
 
-    std::cout << fl1 << std::endl;
-
+    fl.erase(ref2);
+    fl.reverse();
+    std::cout << fl << std::endl;
 
     return 0;
 }
