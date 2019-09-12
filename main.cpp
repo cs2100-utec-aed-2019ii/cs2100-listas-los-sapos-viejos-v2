@@ -1,25 +1,29 @@
 #include <iostream>
+#include "ForwardList.h"
 
-#include "DoublyLinkedList.h"
+int main(int argc, char** argv) {
 
-using namespace std;
+    int arr[] = {1, 2, 3, 4, 5};
 
-int main() {
+    ForwardList<int> fl(arr, 5);
 
-    ForwardList<int> fl;
+    std::cout << "Front: " << fl.front() << std::endl;
+    std::cout << "Back: " << fl.back() << std::endl;
+    std::cout << "Size: " << fl.get_size() << std::endl;
+    std::cout << "Element at fl[2] = " << fl[2] << std::endl;
 
-    fl.push_front(1);
-    fl.push_front(2);
-    fl.push_front(3);
-    fl.push_front(4);
-    fl.push_front(5);
-    fl.push_front(6);
+    std::cout << fl << std::endl;
 
-    cout << fl[0] << fl[1] << fl[2] << fl[3] << fl[4] << fl[5] << endl;
 
-    fl.sort();
+    ForwardList<int> fl1(fl);
 
-    cout << fl[0] << fl[1] << fl[2] << fl[3] << fl[4] << fl[5] << endl;
-    
+    std::cout << "Front: " << fl1.front() << std::endl;
+    std::cout << "Back: " << fl1.back() << std::endl;
+    std::cout << "Size: " << fl1.get_size() << std::endl;
+    std::cout << "Element at fl[2] = " << fl1[2] << std::endl;
+
+    std::cout << fl1 << std::endl;
+
+
     return 0;
 }
