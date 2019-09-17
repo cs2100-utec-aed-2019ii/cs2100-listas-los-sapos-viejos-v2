@@ -7,10 +7,20 @@
 
 template <class T>
 class Node {
+public:
+    typedef T value_t;
+
 protected:
     T value;
+
 public:
-    Node(T value): value{value} {}
+    explicit Node(T value): value{value} {}
+
+    template <class U>
+    friend class Iterator;
+
+    T& operator*() { return value; }
+
     ~Node() = default;
 };
 
