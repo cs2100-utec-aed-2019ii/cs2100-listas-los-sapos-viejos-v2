@@ -94,11 +94,8 @@ public:
     // Constructor copia
     ForwardList(ForwardList& another_list) {
         if (!another_list.is_empty()) {
-            ForwardListNode<T>* temp = another_list.get_head();
-            while (temp != nullptr) {
-                push_back(temp->value);
-                temp = temp->next;
-            }
+            for (auto item : another_list)
+                push_back(item);
         }
     }
 
@@ -152,6 +149,7 @@ public:
     }
 
     T& operator[](const unsigned int& index) override {
+        // TODO: hacer esto con iteradores
         ForwardListNode<T>* cur = head;
         for (unsigned int i = 0; i < index; ++i)
             cur = cur->next;
@@ -274,13 +272,15 @@ public:
     }
 
     void clear() override {
+        // TODO: hacer esto con iteradores
         if (head != nullptr && tail != nullptr) {
             while (head != tail) {
                 ForwardListNode<T> *curr = head;
-                std::cout << "Deleted node with value: " << curr->value << std::endl;
+                std::cout << "Deleting node with value: " << curr->value << std::endl;
                 delete curr;
                 head = head->next;
             }
+            std::cout << "Deleting node with value: " << tail->value << std::endl;
             delete tail;
             head = nullptr;
             tail = nullptr;
@@ -290,6 +290,7 @@ public:
 
     // Elimina un elemento de la lista en base a un puntero
     void erase(ForwardListNode<T>* node_to_delete) {
+        // TODO: pasar esto a iteradores
         if (node_to_delete != nullptr) {
             if (node_to_delete == head) {
                 pop_front();
@@ -302,6 +303,7 @@ public:
                 }
                 ForwardListNode<T> *aux = temp->next; // aux points to the node to delete
                 temp->next = temp->next->next;
+
                 delete aux;
                 decrease_size;
             }
@@ -338,6 +340,7 @@ public:
 
     ForwardList<T>& sort() {
         int i, j;
+        /// TODO: usar con iteradores
         for (i = 0; i < this->get_size()-1; ++i) {
             for (j = 0; j < this->get_size()-i-1; ++j) {
                 if ((*this)[j] > (*this)[j+1]) {
@@ -348,22 +351,18 @@ public:
             }
         }
         return (*this);
-    } /// TODO: hacer esto pero con iteradores
+    }
 
     ForwardList<T>& reverse() {
         std::vector<T> reversed;
-        int cont = 0;
-        ForwardListNode<T>* curr = head;
         unsigned int size = SIZE;
-        for (unsigned int i = 0; i < size; ++i) {
-            reversed.push_back(curr->value);
-            curr = curr->next;
-            ++cont;
-        }
+        for (auto it = begin(); it != end(); ++it)
+            reversed.push_back(*it);
+
         this->clear();
-        for (int i = 0; i < cont; ++i) {
+
+        for (unsigned i = 0; i < size; ++i)
             push_front(reversed[i]);
-        }
         return *this;
     }
 
@@ -389,14 +388,12 @@ public:
 
     // pop_back de un elemento
     inline friend ForwardList& operator>> (ForwardList<T>& self, const T& element_to_delete) {
-        ForwardListNode<T>* temp = self.head;
-        while (temp != nullptr) {
-            if (temp->value == element_to_delete) {
+        for (auto temp : self) {
+            if (temp == element_to_delete) {
                 ForwardListNode<T>* node_to_delete = self.find_node_with_value(element_to_delete);
                 self.erase(node_to_delete);
                 return self;
             }
-            temp = temp->next;
         }
         return self;
     }
