@@ -19,6 +19,14 @@ public:
 
     // const functions are not allowed to change the object on which they are called
 
+    node_t* get_node() {
+        return node;
+    }
+
+    void set_node(node_t new_node) {
+        node = new_node;
+    }
+
     virtual value_t& operator*() {
         return **node;
     }

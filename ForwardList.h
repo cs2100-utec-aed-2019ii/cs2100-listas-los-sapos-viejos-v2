@@ -28,6 +28,8 @@ public:
     explicit ForwardListNode(T value): Node<T>(value) {}
     template <class U>
     friend class ForwardList;
+
+    ~ForwardListNode() = default;
 };
 
 /// FORWARD LIST ///
@@ -35,19 +37,19 @@ public:
 template <class T>
 class ForwardList : public List<T> {
 public:
-    typedef ForwardListNode<T> node_t;
+    typedef ForwardListNode<T> node_t2;
     friend class ForwardIterator;
 
     /// ITERATOR
-    class ForwardListIterator : public Iterator<node_t> {
+    class ForwardListIterator : public Iterator<node_t2> {
     public:
-        typedef typename Iterator<node_t>::node_t node_t; // referencia al nodo
-        typedef typename Iterator<node_t>::value_t value_t; // referencia al valor del nodo
+        typedef typename Iterator<node_t2>::node_t node_t1; // referencia al nodo
+        typedef typename Iterator<node_t2>::value_t value_t; // referencia al valor del nodo
     public:
-        explicit ForwardListIterator(node_t* node = nullptr): Iterator<node_t>(node) { }
+        explicit ForwardListIterator(node_t2* node = nullptr): Iterator<node_t2>(node) { }
 
         ForwardListIterator& operator++() {
-            Iterator<node_t>::node = Iterator<node_t>::node->next;
+            Iterator<node_t2>::node = Iterator<node_t2>::node->next;
             return *this;
         }
 
@@ -73,9 +75,9 @@ public:
             return this->node->value < i.node->value;
         }
 
-//        void operator=(const value_t& new_value) {
-//
-//        }
+        void operator=(const value_t& new_value) {
+            // TODO
+        }
 
         ~ForwardListIterator() = default;
 
@@ -149,31 +151,26 @@ public:
     }
 
     T& operator[](const unsigned int& index) override {
-        // TODO: hacer esto con iteradores
-        ForwardListNode<T>* cur = head;
-        for (unsigned int i = 0; i < index; ++i)
-            cur = cur->next;
-        return cur->value;
+        auto it = begin();
+        for (int i = 0; i < index; ++it, ++i) {}
+        return *it;
     }
 
     ForwardListNode<T>* find_node_at(const unsigned int& index) {
         if (index < SIZE) {
-            ForwardListNode<T>* cur = head;
-            for (unsigned int i = 0; i < index; ++i)
-                cur = cur->next;
-            return cur;
+            auto it = begin();
+            for (int i = 0; i < index; ++it, ++i) {}
+            return it.get_node();
         } else {
             return nullptr;
         }
     }
 
     ForwardListNode<T>* find_node_with_value(const T& value) {
-        ForwardListNode<T>* temp = head;
-        while (temp != nullptr) {
-            if (temp->value == value)
-                return temp;
-            temp = temp->next;
-        }
+        auto it = begin();
+        for (; it != end(); ++it)
+            if (*it == value)
+                return it.get_node();
         return nullptr; // didn't find node with value
     }
 
@@ -272,16 +269,11 @@ public:
     }
 
     void clear() override {
-        // TODO: hacer esto con iteradores
         if (head != nullptr && tail != nullptr) {
-            while (head != tail) {
-                ForwardListNode<T> *curr = head;
-                std::cout << "Deleting node with value: " << curr->value << std::endl;
-                delete curr;
-                head = head->next;
+            for (auto it = begin(); it != end(); ++it) {
+                ForwardListNode<T>* aux = it.get_node();
+                delete aux;
             }
-            std::cout << "Deleting node with value: " << tail->value << std::endl;
-            delete tail;
             head = nullptr;
             tail = nullptr;
             SIZE = 0;
@@ -290,20 +282,17 @@ public:
 
     // Elimina un elemento de la lista en base a un puntero
     void erase(ForwardListNode<T>* node_to_delete) {
-        // TODO: pasar esto a iteradores
         if (node_to_delete != nullptr) {
             if (node_to_delete == head) {
                 pop_front();
             } else if (node_to_delete == tail) {
                 pop_back();
             } else {
-                ForwardListNode<T>* temp = head;
-                while (temp->next != node_to_delete) {
-                    temp = temp->next;
-                }
-                ForwardListNode<T> *aux = temp->next; // aux points to the node to delete
-                temp->next = temp->next->next;
+                auto it = begin();
+                for (; it.get_node()->next != node_to_delete || it.get_node()->next != nullptr; ++it) {}
 
+                ForwardListNode<T>* aux = it.get_node()->next; // aux points to the node to delete
+                it.get_node()->next = it.get_node()->next->next;
                 delete aux;
                 decrease_size;
             }
@@ -326,19 +315,18 @@ public:
 
     // Elimina todos los elementos de la lista que tienen el valor igual al parametro
     void drop(const T& black_value) override {
-        ForwardListNode<T>* temp = head;
-        while (temp != nullptr) {
-            if (temp->value == black_value) {
-                erase(temp);
-                decrease_size;
+        for (auto it = begin(); it != end(); ++it) {
+            if (*it == black_value) {
+                erase(it.get_node());
             }
-            temp = temp->next;
         }
     }
 
     /// Miscelánea (estos métodos retornan un ForwardList para que ambos se puedan encadenar: fl.reverse().sort())
 
     ForwardList<T>& sort() {
+        // TODO: solo falta este y todos los metodos del
+        // TODO: forward list estaran con iteradores
         int i, j;
         /// TODO: usar con iteradores
         for (i = 0; i < this->get_size()-1; ++i) {
