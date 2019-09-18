@@ -1,0 +1,36 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/gabrielsprangerrojas/Desktop/Algoritmos y Estructuras de Datos/Semana 3/Library/ForwardList.h
+cstdlib
+-
+ctime
+-
+vector
+-
+List.h
+/Users/gabrielsprangerrojas/Desktop/Algoritmos y Estructuras de Datos/Semana 3/Library/List.h
+Iterator.h
+/Users/gabrielsprangerrojas/Desktop/Algoritmos y Estructuras de Datos/Semana 3/Library/Iterator.h
+
+/Users/gabrielsprangerrojas/Desktop/Algoritmos y Estructuras de Datos/Semana 3/Library/Iterator.h
+
+/Users/gabrielsprangerrojas/Desktop/Algoritmos y Estructuras de Datos/Semana 3/Library/List.h
+iostream
+-
+Node.h
+/Users/gabrielsprangerrojas/Desktop/Algoritmos y Estructuras de Datos/Semana 3/Library/Node.h
+
+/Users/gabrielsprangerrojas/Desktop/Algoritmos y Estructuras de Datos/Semana 3/Library/Node.h
+
+/Users/gabrielsprangerrojas/Desktop/Algoritmos y Estructuras de Datos/Semana 3/Library/main.cpp
+iostream
+-
+ForwardList.h
+/Users/gabrielsprangerrojas/Desktop/Algoritmos y Estructuras de Datos/Semana 3/Library/ForwardList.h
+

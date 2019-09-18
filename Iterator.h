@@ -5,31 +5,57 @@
 #ifndef DOUBLYLINKEDLIST_ITERATOR_H
 #define DOUBLYLINKEDLIST_ITERATOR_H
 
-#include "Node.h"
-
-template <class N, class T>
+template <class N>
 class Iterator {
+public:
+    typedef N node_t;
+    typedef typename node_t::value_t value_t;
+
 protected:
-    N* node;
+    node_t* node;
 
 public:
+    explicit Iterator(N* node = nullptr): node{node} {}
+
     // const functions are not allowed to change the object on which they are called
-    virtual Iterator&operator++() const = 0;
-    virtual Iterator&operator++(int) const = 0;
 
-    virtual Iterator&operator--() const = 0;
-    virtual Iterator&operator--(int) const = 0;
+    node_t* get_node() {
+        return node;
+    }
 
-    virtual T& operator*() = 0;
+    void set_node(node_t new_node) {
+        node = new_node;
+    }
 
-    virtual bool operator==(const Iterator&) const = 0;
-    virtual bool operator!=(const Iterator&) const = 0;
-    virtual bool operator<=(const Iterator&) const = 0;
-    virtual bool operator>=(const Iterator&) const = 0;
-    virtual bool operator>(const Iterator&) const = 0;
-    virtual bool operator<(const Iterator&) const = 0;
+    virtual value_t& operator*() {
+        return **node;
+    }
 
-    virtual void operator=(const T&) = 0;
+    virtual bool operator==(const Iterator& i) const {
+        return node == i.node;
+    }
+
+    virtual bool operator!=(const Iterator& i) const {
+        return node != i.node;
+    }
+
+//    virtual Iterator& operator++() const {}
+//    virtual Iterator& operator++(int) const {}
+//
+//    virtual Iterator& operator--() const {}
+//    virtual Iterator& operator--(int) const {}
+
+//    virtual bool operator<=(const Iterator& i) const {}
+//
+//    virtual bool operator>=(const Iterator& i) const {}
+//
+//    virtual bool operator>(const Iterator& i) const {}
+//
+//    virtual bool operator<(const Iterator& i) const {}
+//
+//    virtual void operator=(const value_t&) {}
+
+    ~Iterator() = default;
 
 };
 

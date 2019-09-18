@@ -6,12 +6,22 @@
 #define DOUBLYLINKEDLIST_NODE_H
 
 template <class T>
-struct Node {
-    T value;
-    Node* next = nullptr;
+class Node {
+public:
+    typedef T value_t;
 
-    Node() = default;
+protected:
+    T value;
+
+public:
     explicit Node(T value): value{value} {}
+
+    template <class U>
+    friend class Iterator;
+
+    T& operator*() { return value; }
+
+    ~Node() = default;
 };
 
 #endif //DOUBLYLINKEDLIST_NODE_H
